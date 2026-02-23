@@ -1,4 +1,4 @@
-import { fetchBooksByTitle } from "./fetchBooks.js";
+import { fetchBooksByTitle, fetchPopularAfricanBooks } from "./fetchBooks.js";
 import { addFavorite, getFavorites, removeFavorite } from "./favorites.js";
 import {
   readBookFromDataset,
@@ -13,8 +13,6 @@ const searchInput = document.getElementById("searchInput");
 const booksGrid = document.getElementById("booksGrid");
 const statusMessage = document.getElementById("statusMessage");
 const favoritesCount = document.getElementById("favoritesCount");
-const DEFAULT_QUERY = "bestsellers";
-
 function refreshCount() {
   updateFavoritesCount(favoritesCount, getFavorites().length);
 }
@@ -50,13 +48,31 @@ async function searchBooks(query) {
     const books = await fetchBooksByTitle(query);
     if (!books.length) {
       booksGrid.innerHTML = "";
-      setStatusMessage(statusMessage, "No results found. Try a different title.");
+      setStatusMessage(statusMessage, "No results with available covers found. Try a different title.");
       return;
     }
     renderBooksGrid(booksGrid, books, { mode: "browse" });
   } catch (error) {
     booksGrid.innerHTML = "";
     setStatusMessage(statusMessage, error.message || "Something went wrong while fetching books.", "error");
+  }
+}
+
+async function loadPopularAfricanBooks() {
+  setStatusMessage(statusMessage, "");
+  renderLoading(booksGrid);
+  try {
+    const books = await fetchPopularAfricanBooks();
+    if (!books.length) {
+      booksGrid.innerHTML = "";
+      setStatusMessage(statusMessage, "No African popular books with covers found right now.");
+      return;
+    }
+    renderBooksGrid(booksGrid, books, { mode: "browse" });
+    setStatusMessage(statusMessage, "Showing books popular in Africa.", "success");
+  } catch (error) {
+    booksGrid.innerHTML = "";
+    setStatusMessage(statusMessage, error.message || "Could not load African popular books.", "error");
   }
 }
 
@@ -70,4 +86,4 @@ form?.addEventListener("submit", async (event) => {
 booksGrid?.addEventListener("click", handleFavoriteToggle);
 
 refreshCount();
-searchBooks(DEFAULT_QUERY);
+loadPopularAfricanBooks();

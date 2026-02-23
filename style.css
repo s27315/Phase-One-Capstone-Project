@@ -1,8 +1,9 @@
 :root {
-  --hero-grad-a: #e0e7ff;
+  --hero-grad-a: #dbeafe;
   --hero-grad-b: #f8fafc;
   --page-bg-a: #f8fafc;
   --page-bg-b: #dbeafe;
+  --page-bg-c: #ffedd5;
 }
 
 * {
@@ -10,10 +11,42 @@
 }
 
 body {
+  position: relative;
+  isolation: isolate;
   background:
-    radial-gradient(circle at 10% 0%, rgba(191, 219, 254, 0.45), transparent 40%),
-    radial-gradient(circle at 90% 10%, rgba(224, 231, 255, 0.5), transparent 35%),
-    linear-gradient(165deg, var(--page-bg-a), var(--page-bg-b));
+    radial-gradient(circle at 12% 8%, rgba(96, 165, 250, 0.22), transparent 34%),
+    radial-gradient(circle at 88% 14%, rgba(251, 146, 60, 0.2), transparent 32%),
+    radial-gradient(circle at 50% 120%, rgba(56, 189, 248, 0.18), transparent 48%),
+    linear-gradient(160deg, var(--page-bg-a) 0%, var(--page-bg-b) 48%, var(--page-bg-c) 100%);
+  background-size: 120% 120%;
+  animation: page-drift 16s ease-in-out infinite alternate;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    radial-gradient(42rem 42rem at -6% -8%, rgba(59, 130, 246, 0.16), transparent 65%),
+    radial-gradient(36rem 36rem at 105% -10%, rgba(249, 115, 22, 0.14), transparent 62%),
+    radial-gradient(28rem 28rem at 95% 90%, rgba(14, 165, 233, 0.12), transparent 60%);
+  filter: blur(3px);
+  animation: orb-shift 20s ease-in-out infinite alternate;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(15, 23, 42, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: radial-gradient(circle at 50% 35%, black 52%, transparent 100%);
 }
 
 .hero-shell {
@@ -171,6 +204,24 @@ body {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes page-drift {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes orb-shift {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-18px) scale(1.03);
   }
 }
 

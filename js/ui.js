@@ -1,7 +1,5 @@
 import { isFavorite } from "./favorites.js";
 
-const DEFAULT_COVER = "assets/default-cover.svg";
-
 function escapeHtml(value = "") {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -39,7 +37,7 @@ function createCard(book, { mode = "browse" } = {}) {
   const actionClass = mode === "favorites" || favorite
     ? "bg-rose-100 text-rose-700 hover:bg-rose-200"
     : "bg-indigo-100 text-indigo-700 hover:bg-indigo-200";
-  const coverUrl = book.coverUrl || DEFAULT_COVER;
+  const coverUrl = book.coverUrl || "";
 
   const safeTitle = escapeHtml(book.title);
   const safeAuthor = escapeHtml(book.author);
@@ -47,7 +45,6 @@ function createCard(book, { mode = "browse" } = {}) {
   const safeCover = escapeHtml(coverUrl);
   const safeKey = escapeHtml(encodeURIComponent(book.key));
   const safeEncodedYear = escapeHtml(encodeURIComponent(book.year));
-  const safeFallbackCover = escapeHtml(DEFAULT_COVER);
 
   return `
     <article class="book-card rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition hover:shadow-md">
@@ -56,7 +53,7 @@ function createCard(book, { mode = "browse" } = {}) {
         src="${safeCover}"
         alt="Cover for ${safeTitle}"
         loading="lazy"
-        onerror="this.onerror=null;this.src='${safeFallbackCover}';"
+        onerror="this.closest('article')?.remove()"
       />
       <div class="mt-4 flex grow flex-col">
         <h3 class="text-lg font-bold leading-tight">${safeTitle}</h3>

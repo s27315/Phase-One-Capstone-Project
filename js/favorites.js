@@ -1,9 +1,16 @@
 const FAVORITES_KEY = "bookExplorerFavorites";
+const DEFAULT_COVER = "assets/default-cover.svg";
+
+function hasRealCover(book) {
+  const cover = book?.coverUrl || "";
+  return Boolean(cover) && cover !== DEFAULT_COVER;
+}
 
 function readFavorites() {
   try {
     const raw = localStorage.getItem(FAVORITES_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter(hasRealCover) : [];
   } catch {
     return [];
   }
