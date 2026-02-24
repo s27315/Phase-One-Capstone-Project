@@ -8,20 +8,32 @@ import {
   updateFavoritesCount,
 } from "./ui.js";
 
+// Shared footer element (exists on all pages).
+const favoritesCount = document.getElementById("favoritesCount");
+
+// Home page elements.
 const form = document.getElementById("searchForm");
 const searchInput = document.getElementById("searchInput");
 const booksGrid = document.getElementById("booksGrid");
+
+// Favorites page element.
+const favoritesGrid = document.getElementById("favoritesGrid");
+
+// Status element (exists on Home and Favorites pages).
 const statusMessage = document.getElementById("statusMessage");
-const favoritesCount = document.getElementById("favoritesCount");
+
+// Update footer favorites number.
 function refreshCount() {
   updateFavoritesCount(favoritesCount, getFavorites().length);
 }
 
-function handleFavoriteToggle(event) {
+// Home: handle add/remove favorite from book cards.
+function handleHomeFavoriteToggle(event) {
   const button = event.target.closest(".favorite-toggle");
-  if (!button) return;
+  if (!button) {
+    return;
+  }
 
-  // Rebuild the exact book object from the card button data attributes.
   const book = readBookFromDataset(button);
   const shouldRemove = button.textContent.toLowerCase().includes("remove");
 
@@ -38,12 +50,15 @@ function handleFavoriteToggle(event) {
     button.classList.add("bg-rose-100", "text-rose-700", "hover:bg-rose-200");
     setStatusMessage(statusMessage, `"${book.title}" added to favorites.`, "success");
   }
+
   refreshCount();
 }
 
+// Home: search books by title.
 async function searchBooks(query) {
   setStatusMessage(statusMessage, "");
   renderLoading(booksGrid);
+
   try {
     const books = await fetchBooksByTitle(query);
     if (!books.length) {
@@ -51,6 +66,7 @@ async function searchBooks(query) {
       setStatusMessage(statusMessage, "No results with available covers found. Try a different title.");
       return;
     }
+
     renderBooksGrid(booksGrid, books, { mode: "browse" });
   } catch (error) {
     booksGrid.innerHTML = "";
@@ -58,9 +74,11 @@ async function searchBooks(query) {
   }
 }
 
+// Home: load default list when page opens.
 async function loadPopularAfricanBooks() {
   setStatusMessage(statusMessage, "");
   renderLoading(booksGrid);
+
   try {
     const books = await fetchPopularAfricanBooks();
     if (!books.length) {
@@ -68,6 +86,7 @@ async function loadPopularAfricanBooks() {
       setStatusMessage(statusMessage, "No African popular books with covers found right now.");
       return;
     }
+
     renderBooksGrid(booksGrid, books, { mode: "browse" });
     setStatusMessage(statusMessage, "Showing books popular in Africa.", "success");
   } catch (error) {
@@ -76,14 +95,57 @@ async function loadPopularAfricanBooks() {
   }
 }
 
-form?.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  const query = searchInput?.value?.trim() || "";
-  if (!query) return;
-  await searchBooks(query);
-});
+// Favorites page: render saved books.
+function renderFavoritesPage() {
+  const favorites = getFavorites();
+  updateFavoritesCount(favoritesCount, favorites.length);
 
-booksGrid?.addEventListener("click", handleFavoriteToggle);
+  if (!favorites.length) {
+    favoritesGrid.innerHTML = "";
+    setStatusMessage(
+      statusMessage,
+      "No favorites saved yet. Go to Home and add books to your list.",
+      "info",
+    );
+    return;
+  }
 
+  setStatusMessage(statusMessage, "");
+  renderBooksGrid(favoritesGrid, favorites, { mode: "favorites" });
+}
+
+// Favorites page: handle remove button click.
+function handleFavoritesPageClick(event) {
+  const button = event.target.closest(".favorite-toggle");
+  if (!button) {
+    return;
+  }
+
+  const key = decodeURIComponent(button.dataset.key || "");
+  removeFavorite(key);
+  renderFavoritesPage();
+}
+
+// Always refresh count first (all pages).
 refreshCount();
-loadPopularAfricanBooks();
+
+// If Home page is open, attach Home logic.
+if (form && searchInput && booksGrid && statusMessage) {
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const query = searchInput.value.trim();
+    if (!query) {
+      return;
+    }
+    await searchBooks(query);
+  });
+
+  booksGrid.addEventListener("click", handleHomeFavoriteToggle);
+  loadPopularAfricanBooks();
+}
+
+// If Favorites page is open, attach Favorites logic.
+if (favoritesGrid && statusMessage) {
+  favoritesGrid.addEventListener("click", handleFavoritesPageClick);
+  renderFavoritesPage();
+}

@@ -22,12 +22,10 @@ Responsive, interactive, API-powered web app built with HTML, Tailwind CSS, and 
 - `index.html` - Home page
 - `favorites.html` - Favorites page
 - `about.html` - About page
-- `style.css` - Shared styling and animations
-- `js/main.js` - Home page logic
+- `style.css` - Shared styling
+- `js/app.js` - Main app logic for all pages
 - `js/fetchBooks.js` - API fetch functions
 - `js/favorites.js` - localStorage favorites module
-- `js/favoritesPage.js` - Favorites page rendering/events
-- `js/aboutPage.js` - Footer favorites count for About page
 - `js/ui.js` - Shared UI rendering helpers
 
 ## How to Run

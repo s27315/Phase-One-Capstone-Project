@@ -1,0 +1,46 @@
+name: Bug Report
+description: Report a bug or broken behavior
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Bug Summary
+      description: What is broken?
+      placeholder: Example - Search button does nothing on mobile.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps To Reproduce
+      description: List exact steps.
+      placeholder: |
+        1. Open Home page
+        2. Type query
+        3. Click Search
+        4. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+    validations:
+      required: true
+
+  - type: input
+    id: branch
+    attributes:
+      label: Branch
+      description: Branch where bug was found
+      placeholder: feature/search
