@@ -1,28 +1,28 @@
+// Favorites page logic: render saved books and handle remove.
 import { getFavorites, removeFavorite } from "./favorites.js";
 import { renderBooksGrid, setStatusMessage, updateFavoritesCount } from "./ui.js";
 
+// Page elements.
 const favoritesGrid = document.getElementById("favoritesGrid");
 const statusMessage = document.getElementById("statusMessage");
 const favoritesCount = document.getElementById("favoritesCount");
 
+// Render favorites list or empty state.
 function renderFavoritesPage() {
-  const favorites = getFavorites();
-  updateFavoritesCount(favoritesCount, favorites.length);
+  const books = getFavorites();
+  updateFavoritesCount(favoritesCount, books.length);
 
-  if (!favorites.length) {
+  if (!books.length) {
     favoritesGrid.innerHTML = "";
-    setStatusMessage(
-      statusMessage,
-      "No favorites saved yet. Go to Home and add books to your list.",
-      "info",
-    );
+    setStatusMessage(statusMessage, "No favorites saved yet. Go to Home and add books to your list.");
     return;
   }
 
   setStatusMessage(statusMessage, "");
-  renderBooksGrid(favoritesGrid, favorites, { mode: "favorites" });
+  renderBooksGrid(favoritesGrid, books, { mode: "favorites" });
 }
 
+// Remove item when clicking "Remove" on this page.
 favoritesGrid?.addEventListener("click", (event) => {
   const button = event.target.closest(".favorite-toggle");
   if (!button) return;

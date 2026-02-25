@@ -1,3 +1,5 @@
+/* Shared styles and animations for all pages. */
+/* Theme colors used by hero and page background. */
 :root {
   --hero-grad-a: #dbeafe;
   --hero-grad-b: #f8fafc;
@@ -11,6 +13,7 @@
 }
 
 body {
+  /* Main page background layers. */
   position: relative;
   isolation: isolate;
   background:
@@ -19,10 +22,10 @@ body {
     radial-gradient(circle at 50% 120%, rgba(56, 189, 248, 0.18), transparent 48%),
     linear-gradient(160deg, var(--page-bg-a) 0%, var(--page-bg-b) 48%, var(--page-bg-c) 100%);
   background-size: 120% 120%;
-  animation: page-drift 16s ease-in-out infinite alternate;
 }
 
 body::before {
+  /* Decorative blurred background orbs. */
   content: "";
   position: fixed;
   inset: 0;
@@ -33,10 +36,10 @@ body::before {
     radial-gradient(36rem 36rem at 105% -10%, rgba(249, 115, 22, 0.14), transparent 62%),
     radial-gradient(28rem 28rem at 95% 90%, rgba(14, 165, 233, 0.12), transparent 60%);
   filter: blur(3px);
-  animation: orb-shift 20s ease-in-out infinite alternate;
 }
 
 body::after {
+  /* Subtle grid texture over the background. */
   content: "";
   position: fixed;
   inset: 0;
@@ -50,6 +53,7 @@ body::after {
 }
 
 .hero-shell {
+  /* Home hero section gradient. */
   background:
     radial-gradient(circle at top right, rgba(59, 130, 246, 0.2), transparent 45%),
     radial-gradient(circle at bottom left, rgba(129, 140, 248, 0.18), transparent 42%),
@@ -72,6 +76,7 @@ body::after {
 }
 
 .nav-link {
+  /* Small lift effect on nav hover. */
   transition: transform 150ms ease, background-color 150ms ease, color 150ms ease;
 }
 
@@ -81,6 +86,7 @@ body::after {
 }
 
 .book-card {
+  /* Shared card layout and entry animation. */
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -89,31 +95,12 @@ body::after {
   animation: fade-up 360ms ease forwards;
 }
 
-.book-card:nth-child(2) {
-  animation-delay: 50ms;
-}
-
-.book-card:nth-child(3) {
-  animation-delay: 90ms;
-}
-
-.book-card:nth-child(4) {
-  animation-delay: 130ms;
-}
-
-.book-card:nth-child(5) {
-  animation-delay: 170ms;
-}
-
-.book-card:nth-child(6) {
-  animation-delay: 210ms;
-}
-
 .book-card:hover {
   transform: translateY(-4px);
 }
 
 .book-cover {
+  /* Uniform image ratio for all book covers. */
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
@@ -123,6 +110,7 @@ body::after {
 }
 
 .site-footer {
+  /* Footer gradient panel. */
   position: relative;
   overflow: hidden;
   background:
@@ -131,17 +119,8 @@ body::after {
     linear-gradient(135deg, #0f172a 0%, #0c4a6e 45%, #1d4ed8 100%);
 }
 
-.site-footer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-  transform: translateX(-100%);
-  animation: footer-shine 9s linear infinite;
-  pointer-events: none;
-}
-
 .footer-badge {
+  /* Favorites count pill style. */
   display: inline-flex;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.45);
@@ -156,6 +135,7 @@ body::after {
 
 .footer-link,
 .footer-social {
+  /* Footer link button base style. */
   display: inline-flex;
   align-items: center;
   border: 1px solid rgba(255, 255, 255, 0.24);
@@ -207,26 +187,3 @@ body::after {
   }
 }
 
-@keyframes page-drift {
-  from {
-    background-position: 0% 0%;
-  }
-  to {
-    background-position: 100% 100%;
-  }
-}
-
-@keyframes orb-shift {
-  from {
-    transform: translateY(0) scale(1);
-  }
-  to {
-    transform: translateY(-18px) scale(1.03);
-  }
-}
-
-@keyframes footer-shine {
-  to {
-    transform: translateX(100%);
-  }
-}
